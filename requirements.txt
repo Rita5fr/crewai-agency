@@ -1,0 +1,32 @@
+# =============================================================================
+# my_ai_agency - Requirements
+# FastAPI + CrewAI service with Claude (Anthropic) and Gemini (Google) support
+# =============================================================================
+
+# --- Web Framework ---
+fastapi>=0.109.0,<0.112.0          # Modern async web framework for building APIs
+uvicorn[standard]>=0.27.0,<0.31.0  # ASGI server with uvloop and httptools for performance
+
+# --- Data Validation & Serialization ---
+pydantic>=2.5.0,<3.0.0             # Data validation using Python type hints
+pydantic-settings>=2.1.0,<3.0.0   # Settings management with environment variables
+orjson>=3.9.0,<4.0.0               # Fast JSON serialization (optional but recommended)
+
+# --- Configuration ---
+python-dotenv>=1.0.0,<2.0.0        # Load environment variables from .env files
+
+# --- AI/Agent Framework ---
+crewai>=0.80.0,<1.0.0              # Multi-agent orchestration framework
+
+# --- LLM Provider SDKs ---
+anthropic>=0.39.0,<1.0.0           # Official Anthropic SDK for Claude models
+google-genai>=1.0.0,<2.0.0         # Official Google GenAI SDK for Gemini models
+
+# --- HTTP & Networking ---
+httpx>=0.27.0,<0.29.0              # Modern async HTTP client (used by SDKs and for external calls)
+
+# --- Resilience ---
+tenacity>=8.2.0,<10.0.0            # Retry library for handling transient failures
+
+# --- Type Hints ---
+typing-extensions>=4.9.0,<5.0.0    # Backport of typing features for compatibility

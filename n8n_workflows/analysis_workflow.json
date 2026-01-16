@@ -1,0 +1,104 @@
+{
+    "name": "CrewAI Test - Analysis",
+    "nodes": [
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://crew.sidmahto.tech/crews/analysis/run",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\"input\": {\"data_description\": \"{{ $json.body.data_description }}\"}}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "json"
+                        }
+                    }
+                }
+            },
+            "id": "http-1",
+            "name": "Call Analysis Crew",
+            "position": [
+                304,
+                448
+            ],
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "vdCiD2k5hqHZXoQf",
+                    "name": "crew ai api"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json }}",
+                "options": {}
+            },
+            "id": "respond-1",
+            "name": "Respond to Webhook",
+            "position": [
+                512,
+                304
+            ],
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1
+        },
+        {
+            "parameters": {
+                "inputSource": "jsonExample",
+                "jsonExample": "={\"input\": {\"data_description\": \"{{ $fromAI('data_description', 'Description of data to analyze', 'string') }}\"}}"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                224
+            ],
+            "id": "analysis-trigger-1",
+            "name": "When Executed by Another Workflow"
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "Call Analysis Crew": {
+            "main": [
+                [
+                    {
+                        "index": 0,
+                        "node": "Respond to Webhook",
+                        "type": "main"
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Call Analysis Crew",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": true,
+    "settings": {
+        "executionOrder": "v1",
+        "callerPolicy": "workflowsFromSameOwner",
+        "availableInMCP": true,
+        "timeSavedMode": "fixed"
+    }
+}

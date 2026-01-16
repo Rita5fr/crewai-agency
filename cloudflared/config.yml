@@ -1,0 +1,7 @@
+tunnel: ee561a37-92f6-45cb-b6e1-5c9098a7ca12
+credentials-file: /etc/cloudflared/ee561a37-92f6-45cb-b6e1-5c9098a7ca12.json
+
+ingress:
+  - hostname: crew.sidmahto.tech
+    service: http://app:8000
+  - service: http_status:404

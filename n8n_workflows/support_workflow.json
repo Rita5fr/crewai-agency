@@ -1,0 +1,104 @@
+{
+    "name": "CrewAI Test - Support",
+    "nodes": [
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://crew.sidmahto.tech/crews/support/run",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\"input\": {\"issue\": \"{{ $json.body.issue }}\"}}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "json"
+                        }
+                    }
+                }
+            },
+            "id": "http-1",
+            "name": "Call Support Crew",
+            "position": [
+                304,
+                448
+            ],
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "vdCiD2k5hqHZXoQf",
+                    "name": "crew ai api"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json }}",
+                "options": {}
+            },
+            "id": "respond-1",
+            "name": "Respond to Webhook",
+            "position": [
+                512,
+                304
+            ],
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1
+        },
+        {
+            "parameters": {
+                "inputSource": "jsonExample",
+                "jsonExample": "={\"input\": {\"issue\": \"{{ $fromAI('issue', 'The customer support issue', 'string') }}\"}}"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                224
+            ],
+            "id": "support-trigger-1",
+            "name": "When Executed by Another Workflow"
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "Call Support Crew": {
+            "main": [
+                [
+                    {
+                        "index": 0,
+                        "node": "Respond to Webhook",
+                        "type": "main"
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Call Support Crew",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": true,
+    "settings": {
+        "executionOrder": "v1",
+        "callerPolicy": "workflowsFromSameOwner",
+        "availableInMCP": true,
+        "timeSavedMode": "fixed"
+    }
+}

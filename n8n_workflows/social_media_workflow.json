@@ -1,0 +1,104 @@
+{
+    "name": "CrewAI Test - Social Media",
+    "nodes": [
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://crew.sidmahto.tech/crews/social_media/run",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\"input\": {\"industry\": \"{{ $json.body.industry }}\", \"company_name\": \"{{ $json.body.company_name }}\"}}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "json"
+                        }
+                    }
+                }
+            },
+            "id": "http-1",
+            "name": "Call Social Media Crew",
+            "position": [
+                304,
+                448
+            ],
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "vdCiD2k5hqHZXoQf",
+                    "name": "crew ai api"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json }}",
+                "options": {}
+            },
+            "id": "respond-1",
+            "name": "Respond to Webhook",
+            "position": [
+                512,
+                304
+            ],
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1
+        },
+        {
+            "parameters": {
+                "inputSource": "jsonExample",
+                "jsonExample": "={\"input\": {\"industry\": \"{{ $fromAI('industry', 'The target industry', 'string') }}\", \"company_name\": \"{{ $fromAI('company_name', 'The company name', 'string') }}\"}}"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                224
+            ],
+            "id": "social-media-trigger-1",
+            "name": "When Executed by Another Workflow"
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "Call Social Media Crew": {
+            "main": [
+                [
+                    {
+                        "index": 0,
+                        "node": "Respond to Webhook",
+                        "type": "main"
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Call Social Media Crew",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": true,
+    "settings": {
+        "executionOrder": "v1",
+        "callerPolicy": "workflowsFromSameOwner",
+        "availableInMCP": true,
+        "timeSavedMode": "fixed"
+    }
+}

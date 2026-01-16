@@ -34,6 +34,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # Required for some Python packages with native extensions
     gcc \
+    # Required for health checks
+    curl \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
